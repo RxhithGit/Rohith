@@ -1,84 +1,61 @@
-import React from "react";
-import { useFormik } from "formik";
-
-export default function App() {
-  const formik = useFormik({
-    initialValues: {
-      Name: "",
-      email: "",
-      password: ""
-    },
-    onSubmit: (values) => {
-      alert(`LOGIN SUCCESSFUL`);
-    },
-    validate: (values) => {
-      const errors = {};
-      if (!values.Name) {
-        errors.Name = "Required";
-      } else if (values.Name.length > 15) {
-        errors.Name = "Must be 15 characters or less";
+import "./styles.css";
+import { useState } from "react";
+export default function App3() {
+  const [option, setOption] = useState();
+  //  value is the current amount we are deopsit or withdraw
+  const [value, setValue] = useState();
+  // Amount is the account balance
+  const [amount, setAmount] = useState(0);
+  function main(e) {
+    // e.preventDefault which prevents the event that is ocuur.
+    e.preventDefault();
+    if (!option) alert("Please select Deposit or Withdraw");
+    else if (option === "Deposit") {
+      setAmount(Number(value) + amount);
+      console.log(amount);
+    } else {
+      const temp = amount - Number(value);
+      if (temp < 0) {
+        alert("Insufficient Balance");
+      } else {
+        setAmount(temp);
       }
-      if (!values.email) {
-        errors.email = "Required";
-      } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-      ) {
-        errors.email = "Invalid email address";
-      }
-      if (!values.password) {
-        errors.password = "Required";
-      } else if (values.password.length < 8) {
-        errors.password = "Set Passwords using #,@,Numbers,upper & lowercase letters";
-      }
-      return errors;
     }
-  });
+    setValue("");
+  }
 
   return (
-    <div style={{ backgroundColor: "red", width: "230px", minHeight: "180px" }}>
-      <div
-        style={{
-          padding: "10px 15px",
-
-          textAlign: "center",
-          color: "black"
-        }}
-      >
-        <form onSubmit={formik.handleSubmit}>
-          <div>
-            <label htmlFor="Name"> User Name:</label>
-            <input
-              id="Name"
-              name="Name"
-              type="text"
-              onChange={formik.handleChange}
-              value={formik.values.Name}
-            />
-          </div>
-          {formik.errors.Name ? <div>{formik.errors.Name}</div> : null}
-
-          <label htmlFor="email"> EmailId </label>
-          <input
-            id="email"
-            name="email"
-            type="email"
-            onChange={formik.handleChange}
-            value={formik.values.email}
-          />
-          {formik.errors.email ? <div>{formik.errors.email}</div> : null}
-          <div>
-            <label for="passowrd">Password </label>
-            <input
-              type="password"
-              name="password"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-            />
-          </div>
-          {formik.errors.password ? <div>{formik.errors.password}</div> : null}
-          <button type="submit">Submit</button>
-        </form>
-      </div>
+    <div className="First">
+      <h1 className="head">AUTOMATED TELLER MACHINE </h1>
+      <form onSubmit={main}>
+        <br></br>
+        <div>
+          <label className="label">
+            Please Choose Your Transaction
+            <br></br>
+            <select onChange={(e) => setOption(e.target.value)}>
+              <option />
+              <option> Deposit </option>
+              <option> Withdraw </option>
+            </select>
+            <br></br>
+            <br></br>
+            <h2> Your Balance is Rs.{amount}</h2>
+            Enter the amount
+          </label>
+        </div>
+        <br></br>
+        <input
+          type="Number"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+        <div>
+          <br></br>
+          <button className="ok"> SUBMIT </button>
+        </div>
+      </form>
     </div>
   );
 }
+
